@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard Pribadi</title>
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+<script>
+  const token = localStorage.getItem("token");
+  if (!token) {
+    window.location.href = "index.html";
+  }
+</script>
+
+<div class="header">
+  <h1>munel server </h1>
+  <button onclick="logout()">Logout</button>
+</div>
+
+<div class="grid-container">
+
+  <div id="bankPopup" class="popup-bank">
+  <div class="popup-content">
+    <span class="close" onclick="closeBankPopup()">✖</span>
+    <h2>Daftar Bank</h2>
+
+    <div id="bankList"></div>
+    <div id="bankDetail"></div>
+
+  </div>
+</div>
+
+<div id="qrisPopup" class="popup-bank">
+  <div class="popup-content">
+    <span class="close" onclick="closeQRISPopup()">✖</span>
+    <h2>Daftar QRIS</h2>
+
+    <div id="qrisList"></div>
+  </div>
+</div>
+
+<div id="idlePopup">
+  <div class="idle-box">
+    <h3>Apakah Anda masih berada di Munel Server?</h3>
+    <p id="countdownText">Logout dalam 10 detik</p>
+
+    <div class="idle-buttons">
+      <button onclick="stayHere()">Ya</button>
+      <button class="logout-btn" onclick="forceLogout()">Tidak</button>
+    </div>
+  </div>
+</div>
+
+
+  <a href="#" class="card">
+    <div class="icon">📱</div>
+    <h3>Ayang Celluler</h3>
+  </a>
+
+  <a href="#" class="card">
+    <div class="icon">♻️</div>
+    <h3>Barang Loak</h3>
+  </a>
+
+  <a href="#" class="card">
+    <div class="icon">⭐</div>
+    <h3>Apps Premium</h3>
+  </a>
+
+  <a href="#" class="card">
+    <div class="icon">💻</div>
+    <h3>Website Portofolio</h3>
+  </a>
+
+  <div class="card" onclick="openBankPopup()">
+  <div class="icon">🏦</div>
+  <h3>Pembayaran Bank</h3>
+</div>
+
+
+  <div class="card" onclick="openQRISPopup()">
+  <div class="icon">🔳</div>
+  <h3>Pembayaran QRIS</h3>
+</div>
+
+
+  <a href="#" class="card">
+    <div class="icon">🎨</div>
+    <h3>Littlecanvas</h3>
+  </a>
+
+</div>
+
+
+<script>
+function logout(){
+  localStorage.removeItem("token");
+  window.location.href = "index.html";
+}
+</script>
+
+<script>
+let openedIndex = null;
+let banks = [
+  { name:"BCA", rekening:"123111111", owner:"Dwiky", active:true },
+  { name:"BRI", rekening:"123222222", owner:"Dwiky", active:false },
+  { name:"Mandiri", rekening:"123333333", owner:"Dwiky", active:true },
+  { name:"BNI", rekening:"123444444", owner:"Dwiky", active:true },
+  { name:"CIMB Niaga", rekening:"123555555", owner:"Dwiky", active:false },
+  { name:"Danamon", rekening:"123666666", owner:"Dwiky", active:true },
+  { name:"Permata", rekening:"123777777", owner:"Dwiky", active:true },
+  { name:"BTN", rekening:"123888888", owner:"Dwiky", active:false },
+  { name:"OCBC", rekening:"123999999", owner:"Dwiky", active:true },
+  { name:"Maybank", rekening:"123101010", owner:"Dwiky", active:false },
+  { name:"Mega", rekening:"123111212", owner:"Dwiky", active:true },
+  { name:"Sinarmas", rekening:"123131313", owner:"Dwiky", active:true }
+];
+
+
+let qrisOpenedIndex = null;
+let qrisListData = [
+  {
+    name:"QRIS DANA (admin 0%)",
+    img:"assets/qris_dana.png",
+    active:true
+  },
+  {
+    name:"QRIS Gopay Anggun Cell (admin 0,3%)",
+    img:"assets/qris_gopay_anggun.png",
+    active:true
+  },
+  {
+    name:"QRIS Bank BNC Darma Aquatic (admin 0,3%)",
+    img:"assets/qris_bnc.png",
+    active:false
+  },
+  {
+    name:"QRIS Gopay Rujak dan Sambel Pecel Maksul (admin 0,3%)",
+    img:"assets/qris_rujak.png",
+    active:true
+  }
+];
+
+function openBankPopup(){
+  document.getElementById("bankPopup").style.display="flex";
+  renderBanks();
+}
+
+function closeBankPopup(){
+  document.getElementById("bankPopup").style.display="none";
+  document.getElementById("bankDetail").innerHTML="";
+}
+
+function renderBanks(){
+  const list = document.getElementById("bankList");
+  list.innerHTML = "";
+
+  banks.forEach((bank, i) => {
+    list.innerHTML += `
+      <div class="bank-item" onclick="toggleDetail(${i})">
+        <span>${bank.name}</span>
+        <div class="status ${bank.active?'active':'inactive'}"
+             onclick="event.stopPropagation(); toggleStatus(${i})"></div>
+      </div>
+
+      <div id="detail-${i}" class="bank-detail">
+        <p>No Rek: <b>${bank.rekening}</b></p>
+        <p>Nama: <b>${bank.owner}</b></p>
+        <button class="copy-btn" 
+  onclick="event.stopPropagation(); copyText(banks[${i}])">
+  Salin
+</button>
+      </div>
+    `;
+  });
+}
+
+function toggleDetail(i){
+  const detail = document.getElementById(`detail-${i}`);
+
+  // tutup yang lama jika ada
+  if (openedIndex !== null && openedIndex !== i) {
+    document
+      .getElementById(`detail-${openedIndex}`)
+      .classList.remove("open");
+  }
+
+  // toggle sekarang
+  detail.classList.toggle("open");
+
+  openedIndex = detail.classList.contains("open") ? i : null;
+}
+
+
+function toggleStatus(i){
+  banks[i].active = !banks[i].active;
+  renderBanks();
+}
+
+function showDetail(i){
+  const bank = banks[i];
+  const detail = document.getElementById("bankDetail");
+
+  detail.innerHTML = `
+    <div class="bank-detail">
+      <p>No Rek: <b>${bank.rekening}</b></p>
+      <p>Nama: <b>${bank.owner}</b></p>
+      <button class="copy-btn" onclick="copyText('${bank.rekening}')">Salin</button>
+    </div>`;
+}
+
+function copyText(bank){
+  const text = 
+`Bank: ${bank.name}
+Nama: ${bank.owner}
+No Rek: ${bank.rekening}`;
+
+  navigator.clipboard.writeText(text);
+
+  showToast();
+}
+
+function showToast(){
+  const toast = document.getElementById("toast");
+  toast.classList.add("show");
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 1500);
+}
+
+function openQRISPopup(){
+  document.getElementById("qrisPopup").style.display="flex";
+  renderQRIS();
+}
+
+function closeQRISPopup(){
+  document.getElementById("qrisPopup").style.display="none";
+}
+
+function renderQRIS(){
+  const list = document.getElementById("qrisList");
+  list.innerHTML="";
+
+  qrisListData.forEach((qris,i)=>{
+    list.innerHTML += `
+      <div class="bank-item" onclick="toggleQRIS(${i})">
+        <span>${qris.name}</span>
+        <div class="status ${qris.active?'active':'inactive'}"
+          onclick="event.stopPropagation(); toggleQRISStatus(${i})"></div>
+      </div>
+
+      <div id="qris-detail-${i}" class="qris-detail">
+        <img src="${qris.img}">
+        <br>
+        <button class="download-btn"
+          onclick="event.stopPropagation(); downloadQRIS('${qris.img}')">
+          Unduh QRIS
+        </button>
+      </div>
+    `;
+  });
+}
+
+function toggleQRIS(i){
+  const detail = document.getElementById(`qris-detail-${i}`);
+
+  if (qrisOpenedIndex !== null && qrisOpenedIndex !== i) {
+    document
+      .getElementById(`qris-detail-${qrisOpenedIndex}`)
+      .classList.remove("open");
+  }
+
+  detail.classList.toggle("open");
+
+  qrisOpenedIndex = detail.classList.contains("open") ? i : null;
+}
+
+function toggleQRISStatus(i){
+  qrisListData[i].active = !qrisListData[i].active;
+  renderQRIS();
+}
+
+function downloadQRIS(img){
+  const link = document.createElement("a");
+  link.href = img;
+  link.download = "QRIS.png";
+  link.click();
+}
+
+let idleTimer;
+let countdownTimer;
+let secondsLeft = 10;
+
+function resetIdleTimer(){
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(showIdlePopup, 60000); // 1 menit
+}
+
+function showIdlePopup(){
+  document.getElementById("idlePopup").style.display = "flex";
+  secondsLeft = 10;
+  updateCountdown();
+
+  countdownTimer = setInterval(()=>{
+    secondsLeft--;
+    updateCountdown();
+
+    if(secondsLeft <= 0){
+      forceLogout();
+    }
+  },1000);
+}
+
+function updateCountdown(){
+  document.getElementById("countdownText").innerText =
+    `Logout dalam ${secondsLeft} detik`;
+}
+
+function stayHere(){
+  document.getElementById("idlePopup").style.display = "none";
+  clearInterval(countdownTimer);
+  resetIdleTimer();
+}
+
+function forceLogout(){
+  clearInterval(countdownTimer);
+  localStorage.removeItem("token");
+  window.location.href = "index.html";
+}
+
+["click","mousemove","keydown","scroll","touchstart"]
+.forEach(event => {
+  document.addEventListener(event, resetIdleTimer);
+});
+
+resetIdleTimer(); // mulai timer saat halaman dibuka
+
+
+</script>
+
+
+<div id="toast">Berhasil di salin</div>
+
+</body>
+</html>

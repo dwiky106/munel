@@ -1,0 +1,254 @@
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: radial-gradient(circle at top, #020617, #020617, #020617);
+  color: white;
+}
+
+/* HEADER */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 30px;
+  border-bottom: 1px solid #1f2937;
+  background: rgba(15,23,42,0.7);
+  backdrop-filter: blur(8px);
+}
+
+.header h1 {
+  margin: 0;
+}
+
+.header button {
+  background: #ef4444;
+  border: none;
+  padding: 10px 15px;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* GRID */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+  padding: 30px;
+}
+
+/* CARD */
+.card {
+  text-decoration: none;
+  color: white;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid #1f2937;
+  border-radius: 18px;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: 0.3s;
+  box-shadow: 0 0 25px rgba(0,255,255,0.08);
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(0,255,255,0.3);
+  border-color: cyan;
+}
+
+.icon {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.card h3 {
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+/* RESPONSIVE HP */
+@media (max-width: 600px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+.popup-bank {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-content {
+  background: #020617;
+  border: 1px solid #1f2937;
+  padding: 25px;
+  border-radius: 15px;
+  width: 380px;
+  color: white;
+  box-shadow: 0 0 40px rgba(0,255,255,0.2);
+
+  max-height: 80vh;     /* batas tinggi popup */
+  overflow-y: auto;     /* aktifkan scroll */
+}
+
+
+.close {
+  float: right;
+  cursor: pointer;
+}
+
+.bank-item {
+  display: flex;
+  justify-content: space-between;
+  margin: 8px 0;
+  padding: 10px;
+  border-radius: 8px;
+  background: #0f172a;
+  cursor: pointer;
+}
+
+.status {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.active { background: limegreen; }
+.inactive { background: red; }
+
+.bank-detail {
+  margin-top: 15px;
+  background: #020617;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.copy-btn {
+  background: cyan;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.bank-detail {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+  background: #020617;
+  border-radius: 8px;
+  margin-top: 5px;
+}
+
+.bank-detail.open {
+  max-height: 120px;
+  padding: 10px;
+}
+
+
+#toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) scale(0.8);
+  background: #06b6d4;
+  color: black;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: bold;
+  opacity: 0;
+  transition: 0.3s;
+  z-index: 9999;
+}
+
+#toast.show {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+
+.qris-detail {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+  text-align: center;
+}
+
+.qris-detail.open {
+  max-height: 350px;
+  margin-top: 10px;
+}
+
+.qris-detail img {
+  width: 200px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.download-btn {
+  background: cyan;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#idlePopup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.75);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.idle-box {
+  background: #020617;
+  border: 1px solid #1f2937;
+  padding: 30px;
+  border-radius: 18px;
+  text-align: center;
+  color: white;
+  width: 320px;
+  box-shadow: 0 0 40px rgba(0,255,255,0.3);
+  animation: fadePop 0.3s ease;
+}
+
+@keyframes fadePop {
+  from { transform: scale(0.8); opacity:0; }
+  to { transform: scale(1); opacity:1; }
+}
+
+.idle-buttons {
+  margin-top: 15px;
+}
+
+.idle-buttons button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  margin: 5px;
+  cursor: pointer;
+  background: cyan;
+  color: black;
+}
+
+.logout-btn {
+  background: red !important;
+  color: white !important;
+}
