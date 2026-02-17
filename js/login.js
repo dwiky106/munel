@@ -8,7 +8,7 @@ async function login() {
   statusBox.style.display = "block";
 
   try {
-    const response = await fetch("http://backend-login-production-2f4b.up.railway.app/login", {
+    const response = await fetch("https://backend-login-production-2f4b.up.railway.app/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password })
