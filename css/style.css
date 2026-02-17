@@ -105,3 +105,24 @@ button:hover {
   80%  { transform: translate(-50%, -50%) scale(1.05); }
   100% { transform: translate(-50%, -50%) scale(1); }
 }
+
+/* ===== RESPONSIVE LOGIN ===== */
+@media (max-width: 600px) {
+  .login-box {
+    width: 90%;
+    padding: 20px;
+  }
+
+  input {
+    width: 95%;
+    font-size: 16px;
+  }
+
+  button {
+    font-size: 16px;
+  }
+
+  #popup img {
+    width: 120px;
+  }
+}
