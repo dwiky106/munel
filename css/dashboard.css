@@ -1,3 +1,4 @@
+/* ===== GLOBAL ===== */
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
@@ -5,7 +6,7 @@ body {
   color: white;
 }
 
-/* HEADER */
+/* ===== HEADER ===== */
 .header {
   display: flex;
   justify-content: space-between;
@@ -18,6 +19,7 @@ body {
 
 .header h1 {
   margin: 0;
+  font-size: 22px;
 }
 
 .header button {
@@ -29,7 +31,7 @@ body {
   cursor: pointer;
 }
 
-/* GRID */
+/* ===== GRID ===== */
 .grid-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -37,7 +39,7 @@ body {
   padding: 30px;
 }
 
-/* CARD */
+/* ===== CARD ===== */
 .card {
   text-decoration: none;
   color: white;
@@ -69,14 +71,7 @@ body {
   letter-spacing: 1px;
 }
 
-/* RESPONSIVE HP */
-@media (max-width: 600px) {
-  .grid-container {
-    grid-template-columns: 1fr;
-  }
-}
-
-
+/* ===== POPUP BANK & QRIS ===== */
 .popup-bank {
   position: fixed;
   top: 0;
@@ -87,6 +82,7 @@ body {
   display: none;
   justify-content: center;
   align-items: center;
+  z-index: 999;
 }
 
 .popup-content {
@@ -94,20 +90,20 @@ body {
   border: 1px solid #1f2937;
   padding: 25px;
   border-radius: 15px;
-  width: 380px;
+  width: 95%;
+  max-width: 380px;
   color: white;
   box-shadow: 0 0 40px rgba(0,255,255,0.2);
-
-  max-height: 80vh;     /* batas tinggi popup */
-  overflow-y: auto;     /* aktifkan scroll */
+  max-height: 85vh;
+  overflow-y: auto;
 }
-
 
 .close {
   float: right;
   cursor: pointer;
 }
 
+/* ===== BANK LIST ===== */
 .bank-item {
   display: flex;
   justify-content: space-between;
@@ -116,6 +112,7 @@ body {
   border-radius: 8px;
   background: #0f172a;
   cursor: pointer;
+  font-size: 15px;
 }
 
 .status {
@@ -128,21 +125,6 @@ body {
 .inactive { background: red; }
 
 .bank-detail {
-  margin-top: 15px;
-  background: #020617;
-  padding: 10px;
-  border-radius: 8px;
-}
-
-.copy-btn {
-  background: cyan;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.bank-detail {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.4s ease;
@@ -152,14 +134,22 @@ body {
 }
 
 .bank-detail.open {
-  max-height: 120px;
+  max-height: 140px;
   padding: 10px;
 }
 
+.copy-btn {
+  background: cyan;
+  border: none;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 5px;
+}
 
+/* ===== TOAST ===== */
 #toast {
   position: fixed;
-  bottom: 30px;
+  bottom: 25px;
   left: 50%;
   transform: translateX(-50%) scale(0.8);
   background: #06b6d4;
@@ -177,7 +167,7 @@ body {
   transform: translateX(-50%) scale(1);
 }
 
-
+/* ===== QRIS ===== */
 .qris-detail {
   max-height: 0;
   overflow: hidden;
@@ -186,12 +176,12 @@ body {
 }
 
 .qris-detail.open {
-  max-height: 350px;
+  max-height: 380px;
   margin-top: 10px;
 }
 
 .qris-detail img {
-  width: 200px;
+  width: 180px;
   border-radius: 10px;
   margin-bottom: 10px;
 }
@@ -204,6 +194,7 @@ body {
   cursor: pointer;
 }
 
+/* ===== IDLE POPUP ===== */
 #idlePopup {
   position: fixed;
   top: 0;
@@ -220,11 +211,12 @@ body {
 .idle-box {
   background: #020617;
   border: 1px solid #1f2937;
-  padding: 30px;
+  padding: 25px;
   border-radius: 18px;
   text-align: center;
   color: white;
-  width: 320px;
+  width: 90%;
+  max-width: 320px;
   box-shadow: 0 0 40px rgba(0,255,255,0.3);
   animation: fadePop 0.3s ease;
 }
@@ -232,10 +224,6 @@ body {
 @keyframes fadePop {
   from { transform: scale(0.8); opacity:0; }
   to { transform: scale(1); opacity:1; }
-}
-
-.idle-buttons {
-  margin-top: 15px;
 }
 
 .idle-buttons button {
@@ -251,4 +239,35 @@ body {
 .logout-btn {
   background: red !important;
   color: white !important;
+}
+
+/* ===== RESPONSIVE MOBILE ===== */
+@media (max-width: 768px) {
+
+  .header {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .grid-container {
+    grid-template-columns: 1fr;
+    padding: 15px;
+  }
+
+  .card {
+    height: 130px;
+  }
+
+  .icon {
+    font-size: 32px;
+  }
+
+  .qris-detail img {
+    width: 150px;
+  }
+
+  .bank-item {
+    font-size: 14px;
+  }
 }
