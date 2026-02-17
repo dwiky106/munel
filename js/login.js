@@ -1,46 +1,12 @@
-async function login() {
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
-  const statusBox = document.getElementById("statusBox");
-  const statusIcon = document.getElementById("statusIcon");
-  const errorText = document.getElementById("error");
+/* =========================
+   CONFIG BACKEND URL
+========================= */
+const API_URL = "https://backend-login-production-2f4b.up.railway.app/login";
 
-  statusBox.style.display = "block";
-
-  try {
-    const response = await fetch("https://backend-login-production-2f4b.up.railway.app/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password })
-    });
-
-    const result = await response.json();
-
-    if (result.success) {
-      statusIcon.src = "assets/success.png";
-      errorText.innerText = "Login Berhasil!";
-      errorText.style.color = "lightgreen";
-
-      localStorage.setItem("token", result.token);
-
-      setTimeout(() => {
-        window.location.href = "dashboard.html";
-      }, 1200);
-
-    } else {
-      statusIcon.src = "assets/failed.png";
-      errorText.innerText = "Username / Password Salah";
-      errorText.style.color = "red";
-    }
-
-  } catch (err) {
-    statusIcon.src = "assets/failed.png";
-    errorText.innerText = "Server tidak terhubung";
-    errorText.style.color = "red";
-  }
-}
-
-function showPopup(icon, text, color, redirect=false) {
+/* =========================
+   POPUP FUNCTION
+========================= */
+function showPopup(icon, text, color, redirect = false) {
   const popup = document.getElementById("popup");
   const popupIcon = document.getElementById("popupIcon");
   const popupText = document.getElementById("popupText");
@@ -61,28 +27,55 @@ function showPopup(icon, text, color, redirect=false) {
   }, 2000);
 }
 
+/* =========================
+   LOGIN FUNCTION
+========================= */
 async function login() {
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  if (!username || !password) {
+    showPopup("assets/jokobi.jpg", "Username / Password kosong", "red");
+    return;
+  }
 
   try {
-    const response = await fetch("http://localhost:3000/login", {
+    const response = await fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password })
     });
 
+    if (!response.ok) {
+      throw new Error("Server error");
+    }
+
     const result = await response.json();
 
     if (result.success) {
       localStorage.setItem("token", result.token);
-      showPopup("assets/praroro.jpg", "Login Berhasil!", "lightgreen", true);
+
+      showPopup(
+        "assets/praroro.jpg",
+        "Login Berhasil!",
+        "lightgreen",
+        true
+      );
     } else {
-      showPopup("assets/bahlil.jpg", "Username / Password Salah Cuy", "red");
+      showPopup(
+        "assets/bahlil.jpg",
+        "Username / Password Salah",
+        "red"
+      );
     }
 
   } catch (err) {
-    showPopup("assets/jokobi.jpg", "Server Tidak Terhubung", "red");
+    console.error("LOGIN ERROR:", err);
+
+    showPopup(
+      "assets/jokobi.jpg",
+      "Server tidak terhubung",
+      "red"
+    );
   }
 }
-
